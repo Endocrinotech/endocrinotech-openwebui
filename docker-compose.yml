@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  open-webui:
+    build: .
+    image: open-webui-supabase:latest
+    ports:
+      - "8080:8080"
+    environment:
+      # --- Supabase OAuth Consent ---
+      SUPABASE_PROJECT: "${SUPABASE_PROJECT}"
+      SUPABASE_SERVICE_ROLE_KEY: "${SUPABASE_SERVICE_ROLE_KEY}"
+
+      # --- Open Web UI OIDC ---
+      OAUTH_CLIENT_ID: "${OAUTH_CLIENT_ID}"
+      OAUTH_CLIENT_SECRET: "${OAUTH_CLIENT_SECRET}"
+      OPENID_PROVIDER_URL: "${OPENID_PROVIDER_URL}"
+      OPENID_REDIRECT_URI: "${OPENID_REDIRECT_URI}"
+      OAUTH_PROVIDER_NAME: "Supabase"
+
+      # --- Auth UI ---
+      ENABLE_LOGIN_FORM: "false"
+      OAUTH_AUTO_REDIRECT: "true"
+
+      # --- Open Web UI essentials ---
+      WEBUI_SECRET_KEY: "${WEBUI_SECRET_KEY:-changeme-in-production}"
+      WEBUI_DEFAULT_USER_ROLE: "user"
+    volumes:
+      - open-webui-data:/app/backend/data
+
+volumes:
+  open-webui-data:
